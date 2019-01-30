@@ -124,9 +124,19 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
     }
 
     case CREATE: {
+      const options = {
+        method: 'POST',
+        body: JSON.stringify(params.data),
+        headers: new Headers({
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer " + localStorage.token
+        })
+      };
+
       return {
         url: `${API_URL}/${resource}`,
-        options: { method: 'POST', body: JSON.stringify(params.data) },
+        options
       };
     }
 

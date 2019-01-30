@@ -1,10 +1,10 @@
 import React from 'react';
 import {
   List, Edit, Create, Datagrid, TextField, Responsive,
-  EditButton, SimpleForm, DisabledInput, TextInput,
-  DateField, Filter, SimpleList
+  EditButton, SimpleForm, TextInput, ReferenceField,
+  DateField, Filter, SimpleList, SimpleShowLayout, Show
 } from 'react-admin';
-//import MyUrlField from './MyUrlField';
+
 
 const UserFilter = (props) => (
   <Filter {...props}>
@@ -20,15 +20,21 @@ export const UserList = (props) => (
           primaryText={user => user.username}
           secondaryText={user => user.lastName}
           tertiaryText={user => new Date(user.createdDate).toLocaleDateString()}
+          linkType="show"
         />
       }
       medium={
         <Datagrid>
-          <TextField source="id" label="ID" sortable={false} />
-          <TextField source="username" />
+          <ReferenceField
+            label="Username"
+            source="id"
+            reference="users"
+            linkType="show">
+            <TextField source="username" />
+          </ReferenceField>
           <TextField source="firstName" />
           <TextField source="lastName" />
-          <DateField source="createdDate" showTime />
+          <DateField source="createdDate" />
           <EditButton />
         </Datagrid>
       }
@@ -42,8 +48,7 @@ const UserTitle = ({ record }) => {
 
 export const UserEdit = props => (
   <Edit title={<UserTitle />} {...props}>
-    <SimpleForm>
-      <DisabledInput source="id" />
+    <SimpleForm redirect="list">
       <TextInput source="username" />
       <TextInput source="firstName" />
       <TextInput source="lastName" />
@@ -54,11 +59,22 @@ export const UserEdit = props => (
 
 export const UserCreate = props => (
   <Create {...props}>
-    <SimpleForm>
+    <SimpleForm redirect="list">
       <TextInput source="username" />
       <TextInput source="firstName" />
       <TextInput source="lastName" />
       <TextInput source="password" type="password" />
     </SimpleForm>
   </Create>
+);
+
+export const UserShow = (props) => (
+  <Show title="Blazar" {...props}>
+    <SimpleShowLayout>
+      <TextField source="username" />
+      <TextField source="firstName" />
+      <TextField source="lastName" />
+      <DateField source="createdDate" showTime />
+    </SimpleShowLayout>
+  </Show>
 );
